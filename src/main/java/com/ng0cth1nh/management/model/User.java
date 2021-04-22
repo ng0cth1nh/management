@@ -1,48 +1,45 @@
 package com.ng0cth1nh.management.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "t_user")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class User extends BaseModel{
 
-    @Id
-    private Integer id;
+    @Column(name = "username",unique = true,nullable = false)
+    private String username;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "t_user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Role> roles = new HashSet<>();
 
-    @Column(name = "company_id")
-    private int companyId;
+//    @ManyToOne
+//    @JoinColumn(name = "company_id",nullable = false)
+    private Integer companyId;
+
+    private  Boolean active;
 
 
-    @Column(name = "is_active")
-    private boolean isActive;
-
-    public User() {
+    public String getUsername() {
+        return username;
     }
 
-    public User(Integer id, String password, String name,
-                int companyId, boolean isActive) {
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.companyId = companyId;
-        this.isActive = isActive;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -53,27 +50,38 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
-    public int getCompanyId() {
+    public Integer getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public List<GrantedAuthority> getAuthorities(){
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        for (Role role : roles){
+            for(Permission permission : role.getPermissions()){
+                authorities.add(new SimpleGrantedAuthority(permission.getPermissionKey()));
+            }
+        }
+
+        return authorities;
     }
 }

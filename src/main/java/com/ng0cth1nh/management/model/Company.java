@@ -1,43 +1,29 @@
 package com.ng0cth1nh.management.model;
 
-
-
-import org.hibernate.annotations.Type;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "company")
-public class Company {
+@Table(name = "t_company")
+public class Company extends BaseModel{
 
-    @Id
-    private Integer id;
-
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean active;
 
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "companyId")
+    private Set<User> users = new HashSet<>();
 
     public Company() {
     }
-
-    public Company(Integer id, String name, Boolean isActive) {
-        this.id = id;
+    public Company(String name, Boolean active, Set<User> users) {
         this.name = name;
-        this.isActive = isActive;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.active = active;
+        this.users = users;
     }
 
     public String getName() {
@@ -49,10 +35,18 @@ public class Company {
     }
 
     public Boolean getActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(Boolean active) {
-        isActive = active;
+        this.active = active;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }
