@@ -14,4 +14,7 @@ public interface UserService {
     Optional<User> findById(Integer id);
 
     List<User> getUsers();
+
+    User updateUser(Integer id,String username,String name,
+                    String password,Integer companyId,Boolean active);
 }
