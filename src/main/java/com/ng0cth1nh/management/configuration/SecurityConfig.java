@@ -59,26 +59,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .csrf().disable();
 
-        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable();
+//        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .csrf().disable();
 //
-//        http = http.cors().and().csrf().disable();
-//
-//        http = http
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and();
-//
-//        http = http.exceptionHandling().authenticationEntryPoint(restServicesEntryPoint()).and();
-//
-//
+         http.cors().and().csrf().disable();
+
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and();
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(restServicesEntryPoint()).and()
+                .authorizeRequests()
+                .antMatchers("/api/v1/user/login**").permitAll()
+                .antMatchers("/api/v1/user/register**").permitAll()
+                .anyRequest().authenticated();
+
+
+
 //        http.authorizeRequests()
 //             .antMatchers("/api/v1/user/login**").permitAll()
 //             .antMatchers(HttpMethod.GET,"/api/v1/users**").access("hasAnyAuthority('USER_READ')")
 //             .anyRequest().authenticated();
-//
-//
-//        http.addFilterBefore(jwtRequestFilter(),UsernamePasswordAuthenticationFilter.class);
+
+
+        http.addFilterBefore(jwtRequestFilter(),UsernamePasswordAuthenticationFilter.class);
+         //   .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
 
 
 //        http.csrf().ignoringAntMatchers("/api/v1/**");

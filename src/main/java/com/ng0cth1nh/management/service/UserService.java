@@ -15,6 +15,8 @@ public interface UserService {
 
     List<User> getUsers();
 
+    void deleteUser(Integer id);
+
     User updateUser(Integer id,String username,String name,
                     String password,Integer companyId,Boolean active);
 }

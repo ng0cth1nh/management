@@ -20,14 +20,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional
     public User createUser(User user) {
         return userRepository.saveAndFlush(user);
     }
 
     @Override
     public User findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        return user;
+        return userRepository.findByUsername(username);
     }
 
     @Override
@@ -38,6 +38,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUser(Integer id) {
+         userRepository.deleteById(id);
     }
 
     @Override
@@ -71,8 +76,12 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        user.setCompanyId(companyId);
-        user.setActive(active);
+        if(companyId != null){
+            user.setCompanyId(companyId);
+        }
+        if(active != null){
+            user.setActive(active);
+        }
 
        return userRepository.saveAndFlush(user);
 

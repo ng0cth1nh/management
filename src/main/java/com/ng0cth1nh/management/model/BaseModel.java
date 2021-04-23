@@ -20,6 +20,12 @@ public abstract class BaseModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    public BaseModel() {
+
+    }
+    public BaseModel(Integer id) {
+        this.id = id;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

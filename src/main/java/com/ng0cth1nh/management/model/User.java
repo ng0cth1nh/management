@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "t_user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(value = { "roles", "authorities" })
+@JsonIgnoreProperties(value = { "authorities" })
 public class User extends BaseModel{
 
     @Column(name = "username",unique = true,nullable = false)
@@ -36,6 +36,7 @@ public class User extends BaseModel{
 
     @Column(name = "name",nullable = false)
     private String name;
+
 
 
     public String getName() {
@@ -89,11 +90,10 @@ public class User extends BaseModel{
     public List<GrantedAuthority> getAuthorities(){
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for (Role role : roles){
-           // for(Permission permission : role.getPermissions()){
                 authorities.add(new SimpleGrantedAuthority(role.getRoleKey()));
-           // }
         }
 
         return authorities;
     }
+
 }
