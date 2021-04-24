@@ -1,6 +1,5 @@
 package com.ng0cth1nh.management.configuration;
 
-import com.ng0cth1nh.management.security.CustomAccessDeniedHandler;
 import com.ng0cth1nh.management.security.JwtRequestFilter;
 import com.ng0cth1nh.management.security.RestAuthenticationEntryPoint;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,11 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RestAuthenticationEntryPoint restServicesEntryPoint() {
         return new RestAuthenticationEntryPoint();
-    }
-
-    @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
     }
 
     @Bean
