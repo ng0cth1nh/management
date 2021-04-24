@@ -41,8 +41,6 @@ public class JwtRequestFilter extends UsernamePasswordAuthenticationFilter {
             String username = jwtUtil.getUsernameFromToken(authToken);
             com.ng0cth1nh.management.model.User user = userService.findByUsername(username);
             if (user != null) {
-//                System.out.println(user.getUsername());
-//                System.out.println(user.getRoles().iterator().next().getPermissions().iterator().next().getPermissionKey());
                 boolean enabled = true;
                 boolean accountNonExpired = true;
                 boolean credentialsNonExpired = true;
@@ -51,12 +49,11 @@ public class JwtRequestFilter extends UsernamePasswordAuthenticationFilter {
                         credentialsNonExpired, accountNonLocked, user.getAuthorities());
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail,
                         null, userDetail.getAuthorities());
-                //System.out.println("userdetail " + userDetail.getAuthorities().size());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

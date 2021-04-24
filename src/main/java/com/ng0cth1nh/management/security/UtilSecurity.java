@@ -15,18 +15,15 @@ public class UtilSecurity {
     private UserRepository userRepository;
 
 
-    @Autowired
-    private CompanyRepository companyRepository;
-
     public boolean hasUserId(Authentication authentication, Integer userId) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user  = userRepository.findByUsername(userDetails.getUsername());
+        User user  = userRepository.findUserByUsername(userDetails.getUsername()).orElse(null);
         return user.getId() == userId;
     }
 
     public boolean isUserInCompany(Authentication authentication, Integer companyId) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user  = userRepository.findByUsername(userDetails.getUsername());
+        User user  = userRepository.findUserByUsername(userDetails.getUsername()).orElse(null);
         return user.getCompanyId() == companyId;
     }
 }

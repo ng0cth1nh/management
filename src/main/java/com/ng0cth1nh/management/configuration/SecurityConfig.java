@@ -20,14 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-//
-//    @Autowired
-//    private JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public JwtRequestFilter jwtRequestFilter() throws Exception {
         JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
-       jwtRequestFilter.setAuthenticationManager(authenticationManager());
+        jwtRequestFilter.setAuthenticationManager(authenticationManager());
         return jwtRequestFilter;
     }
 
@@ -50,55 +47,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-//                .authorizeRequests()
-//                .antMatchers("api/v1/**").permitAll()
-//
-//                .and()
-//                .httpBasic()
-//                .and()
-//                .csrf().disable();
 
-//        http.addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-//                .csrf().disable();
-//
-         http.cors().and().csrf().disable();
-
-        http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
-
-        http.exceptionHandling()
-                .authenticationEntryPoint(restServicesEntryPoint()).and()
+        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/user/login**").permitAll()
-                .antMatchers("/api/v1/user/register**").permitAll()
-                .anyRequest().authenticated();
-
-
-
-//        http.authorizeRequests()
-//             .antMatchers("/api/v1/user/login**").permitAll()
-//             .antMatchers(HttpMethod.GET,"/api/v1/users**").access("hasAnyAuthority('USER_READ')")
-//             .anyRequest().authenticated();
-
-
-        http.addFilterBefore(jwtRequestFilter(),UsernamePasswordAuthenticationFilter.class);
-         //   .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
-
-
-//        http.csrf().ignoringAntMatchers("/api/v1/**");
-//        http.authorizeRequests().antMatchers("/api/v1/user/login**").permitAll();
-//
-//        http.antMatcher("/api/v1/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/api/v1/**").access("hasRole('USER')")
-//                .antMatchers(HttpMethod.POST, "/api/v1/**").access("hasRole('USER')")
-//                .antMatchers(HttpMethod.DELETE, "/api/v1/**").access("hasRole('USER')")
-//                .and()
-//                .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-//                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
+                .antMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .anyRequest().authenticated().and()
+                .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+                .httpBasic()
+                .and()
+                .csrf().disable();
 
     }
 }
