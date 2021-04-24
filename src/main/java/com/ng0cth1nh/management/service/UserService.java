@@ -11,7 +11,6 @@ public interface UserService {
 
     String login(User user);
 
-
     User findByUsername(String username);
 
     User findById(Integer id);

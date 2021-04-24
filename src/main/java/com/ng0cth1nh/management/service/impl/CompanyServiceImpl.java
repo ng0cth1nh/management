@@ -19,6 +19,12 @@ public class CompanyServiceImpl implements CompanyService {
 
 
     @Override
+    @Transactional
+    public Company createCompany(Company company) {
+        return companyRepository.saveAndFlush(company);
+    }
+
+    @Override
     public Company findById(Integer id) {
         return companyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Company with ID : " + id + " Not Found!"));
@@ -46,5 +52,13 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         return companyRepository.saveAndFlush(company);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCompany(Integer id) {
+        companyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company with ID : " + id + " Not Found!"));
+        companyRepository.deleteById(id);
     }
 }

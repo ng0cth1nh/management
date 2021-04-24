@@ -1,7 +1,6 @@
 package com.ng0cth1nh.management.configuration;
 
 import com.ng0cth1nh.management.security.JwtRequestFilter;
-import com.ng0cth1nh.management.security.RestAuthenticationEntryPoint;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +19,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**"
+    };
+
     @Bean
     public JwtRequestFilter jwtRequestFilter() throws Exception {
         JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
         jwtRequestFilter.setAuthenticationManager(authenticationManager());
         return jwtRequestFilter;
     }
+
 
     @Bean
     public RestAuthenticationEntryPoint restServicesEntryPoint() {
@@ -47,10 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/users/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/companies").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-                .httpBasic()
-                .and()
                 .csrf().disable();
 
     }

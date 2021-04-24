@@ -30,17 +30,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User createUser(User user) {
 
-
         User u = userRepository.findUserByUsername(user.getUsername()).orElse(null);
         if (u != null) {
             throw new IllegalStateException("Username: " + user.getUsername() + " has been taken!");
         }
 
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.setActive(true);
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role(2));
-        user.setRoles(roles);
+//        user.setActive(true);
+//        Set<Role> roles = new HashSet<>();
+//        roles.add(new Role(2));
+//        user.setRoles(roles);
 
         return userRepository.saveAndFlush(user);
     }

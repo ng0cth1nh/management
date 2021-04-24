@@ -2,6 +2,10 @@ package com.ng0cth1nh.management.controller;
 
 import com.ng0cth1nh.management.model.*;
 import com.ng0cth1nh.management.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +13,24 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "/api/v1/")
+@Api(value = "User APIs")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @ApiOperation(value = "List of users", response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not found")
+    })
 
     @GetMapping("users")
     public ResponseEntity<Object> getUsers() {
@@ -51,8 +66,7 @@ public class UserController {
     }
 
     @PostMapping("users")
-    public ResponseEntity<?> register(@RequestBody User user) {
-
+    public ResponseEntity<?> createUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.OK);
     }
 
