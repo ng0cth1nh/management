@@ -1,10 +1,7 @@
 package com.ng0cth1nh.management.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,21 +22,20 @@ public class User extends BaseModel{
     @Column(name = "username",unique = true,nullable = false)
     private String username;
 
-
     private String password;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "t_user_role", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
 
+
+    @JoinColumn(name = "company_id")
     private Integer companyId;
 
     private  Boolean active;
 
     @Column(name = "name",nullable = false)
     private String name;
-
-
 
     public String getName() {
         return name;
@@ -82,6 +78,7 @@ public class User extends BaseModel{
     public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
+
 
     public Boolean getActive() {
         return active;

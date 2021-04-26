@@ -1,6 +1,5 @@
 package com.ng0cth1nh.management.security;
 
-import com.ng0cth1nh.management.repository.CompanyRepository;
 import com.ng0cth1nh.management.repository.UserRepository;
 import com.ng0cth1nh.management.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +16,21 @@ public class UtilSecurity {
 
     public boolean hasUserId(Authentication authentication, Integer userId) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user  = userRepository.findUserByUsername(userDetails.getUsername()).orElse(null);
+        User user  = userRepository.findUserByUsername(userDetails.getUsername()).get();
         return user.getId() == userId;
     }
 
     public boolean isUserInCompany(Authentication authentication, Integer companyId) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user  = userRepository.findUserByUsername(userDetails.getUsername()).orElse(null);
+        User user  = userRepository.findUserByUsername(userDetails.getUsername()).get();
         return user.getCompanyId() == companyId;
+    }
+
+
+    public boolean isAdminInCompany(Authentication authentication, Integer userId) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User userAdmin  = userRepository.findUserByUsername(userDetails.getUsername()).get();
+        User user = userRepository.findById(userId).orElse(null);
+        return user.getCompanyId() == userAdmin.getCompanyId();
     }
 }

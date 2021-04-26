@@ -1,9 +1,6 @@
 package com.ng0cth1nh.management.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +12,7 @@ public class Company extends BaseModel{
 
     private Boolean active;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "companyId")
+    @OneToMany(cascade = {CascadeType.REMOVE},fetch = FetchType.EAGER,mappedBy = "companyId")
     private Set<User> users = new HashSet<>();
 
     public Company() {

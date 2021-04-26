@@ -9,8 +9,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "t_role")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(value = {"roleName", "permissions"})
+// @JsonInclude(JsonInclude.Include.NON_NULL)
+// @JsonIgnoreProperties(value = {"roleName", "permissions"})
 public class Role extends BaseModel {
 
     private String roleName;
